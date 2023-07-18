@@ -35,7 +35,9 @@ class MyHomePage extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(hintText: 'Cellphone'),
                 inputFormatters: [
-                  TextInputMask(mask: '\\+ 9 (999) 9999 99 99', reverse: false)
+                  TextInputMask(
+                    mask: ['\\+ 9 (999) 9999 99 99'],
+                  )
                 ],
               ),
             ),
@@ -45,10 +47,10 @@ class MyHomePage extends StatelessWidget {
                 decoration: InputDecoration(hintText: 'Brazilian CPF'),
                 inputFormatters: [
                   TextInputMask(
-                      mask: '999.999.999-99',
-                      placeholder: '_',
-                      maxPlaceHolders: 11,
-                      reverse: false)
+                    mask: ['999.999.999-99'],
+                    placeholder: '_',
+                    maxPlaceHolders: 11,
+                  )
                 ],
               ),
             ),
@@ -58,8 +60,8 @@ class MyHomePage extends StatelessWidget {
                 decoration: InputDecoration(hintText: 'Multi Mask CPF/CNPJ'),
                 inputFormatters: [
                   TextInputMask(
-                      mask: ['999.999.999-99', '99.999.999/9999-99'],
-                      reverse: false)
+                    mask: ['999.999.999-99', '99.999.999/9999-99'],
+                  )
                 ],
               ),
             ),
@@ -69,8 +71,8 @@ class MyHomePage extends StatelessWidget {
                 decoration: InputDecoration(hintText: 'Multi Mask Phone'),
                 inputFormatters: [
                   TextInputMask(
-                      mask: ['(99) 9999 9999', '(99) 99999 9999'],
-                      reverse: false)
+                    mask: ['(99) 9999 9999', '(99) 99999 9999'],
+                  )
                 ],
               ),
             ),
@@ -79,7 +81,9 @@ class MyHomePage extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(hintText: 'Date'),
                 inputFormatters: [
-                  TextInputMask(mask: '99/99/9999', reverse: false)
+                  TextInputMask(
+                    mask: ['99/99/9999'],
+                  )
                 ],
               ),
             ),
@@ -88,7 +92,9 @@ class MyHomePage extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(hintText: 'Brazilian Phone'),
                 inputFormatters: [
-                  TextInputMask(mask: '\\+5!5! (!99) 99999-9999')
+                  TextInputMask(
+                    mask: ['\\+5!5! (!99) 99999-9999'],
+                  )
                 ],
               ),
             ),
@@ -99,7 +105,7 @@ class MyHomePage extends StatelessWidget {
                 decoration: InputDecoration(hintText: 'Money'),
                 inputFormatters: [
                   TextInputMask(
-                    mask: '\$! !9+,99',
+                    mask: ['\$! !9+,99'],
                     placeholder: '0',
                     maxPlaceHolders: 3,
                     reverse: true,

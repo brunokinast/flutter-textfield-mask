@@ -14,27 +14,41 @@ class MagicMask {
   static const String _multiple = 'multiple';
   static const String _multipleOpt = 'multiple';
 
-  late bool _reverse;
-  bool _overflow = false;
-  late int _charIndex;
-  late int _tagIndex;
-  late int _step;
-  late int _charDeslocation;
-  late int _cursorPosition;
-  late String _placeholder;
-  late int _maxPlaceHolderCharacters;
-  late String _maskedText;
-  late String _extraChar;
-  late int _typedCharacter;
+  bool _reverse;
+  bool _overflow;
+  int _charIndex;
+  int _tagIndex;
+  int _step;
+  int _charDeslocation;
+  int _cursorPosition;
+  String _placeholder;
+  int _maxPlaceHolderCharacters;
+  String _maskedText;
+  String _extraChar;
+  int _typedCharacter;
 
   List<Map<String, String>> _tags = [];
   List<List<Map<String, String>>> _allTags = [];
   int _curTag = 0;
 
-  MagicMask();
-
-  MagicMask.buildMask(dynamic mask) {
-    if (mask != null) this.buildMaskTokens(mask);
+  MagicMask(
+    List<String> mask, [
+    bool reverse = false,
+    String placeholder = '',
+    int maxPlaceHolderCharacters = 0,
+  ])  : _reverse = reverse,
+        _step = reverse ? -1 : 1,
+        _placeholder = placeholder,
+        _maxPlaceHolderCharacters = maxPlaceHolderCharacters,
+        _cursorPosition = 0,
+        _charDeslocation = 0,
+        _typedCharacter = 0,
+        _tagIndex = 0,
+        _charIndex = 0,
+        _maskedText = '',
+        _extraChar = '',
+        _overflow = false {
+    _buildMaskTokens(mask);
   }
 
   String? _lastMaskType() => _tags.last[_type];
@@ -64,17 +78,9 @@ class MagicMask {
   /// ** Any character that is interpreted as letter to be placed, can be followed by modifier **
   ///
   /// \! - Used to force print it, when it has at least 1 letter
-  void buildMaskTokens(dynamic masks) {
-    List<String> maskList = [];
-    if (masks is String) {
-      maskList.add(masks);
-    } else if (masks is List<String>) {
-      maskList = masks;
-    } else {
-      throw Exception('Unknown mask type');
-    }
+  void _buildMaskTokens(List<String> masks) {
     _curTag = 0;
-    for (var mask in maskList) {
+    for (var mask in masks) {
       _allTags.add([]);
       _tags = _allTags[_curTag];
       _processMask(mask);
@@ -128,8 +134,7 @@ class MagicMask {
   /// It returns a formatted String.
   String getAdvancedMaskedString(String text, int maxLenght, String placeholder,
       int maxPlaceHolderCharacters) {
-    return executeMasking(text, 0, false, maxLenght, placeholder,
-        maxPlaceHolderCharacters)['text'];
+    return executeMasking(text, 0, maxLenght)['text'];
   }
 
   /// [text] is the mask to be formatter on mask.
@@ -149,18 +154,13 @@ class MagicMask {
   /// ```
   ///
   Map<String, dynamic> executeMasking(
-      String? text,
-      int cursorPosition,
-      bool reverse,
-      int maxLenght,
-      String placeholder,
-      int maxPlaceHolderCharacters) {
+    String? text,
+    int cursorPosition,
+    int maxLenght,
+  ) {
     if (text == null || text.isEmpty || _tags.length == 0)
       return _buildResultJson('', 0, maxLenght);
-    _reverse = reverse;
-    _step = _reverse ? -1 : 1;
-    _placeholder = placeholder;
-    _maxPlaceHolderCharacters = maxPlaceHolderCharacters;
+
     List<Map<String, dynamic>> results = [];
     for (var i = 0; i < _allTags.length; i++) {
       _tags = _allTags[i];

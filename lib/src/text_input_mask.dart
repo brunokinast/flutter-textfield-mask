@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'magic_mask.dart';
@@ -6,12 +5,9 @@ import 'magic_mask.dart';
 /// TextInputMask extends the TextInputFormatter to make your life better!
 /// Just initiate it with the mask as string and it's done.
 class TextInputMask extends TextInputFormatter {
-  dynamic mask;
-  String placeholder;
-  bool reverse;
+  List<String> mask;
   int maxLength;
-  int maxPlaceHolders;
-  late MagicMask magicMask;
+  MagicMask magicMask;
 
   /// [mask] is the String or Array of Strings to be used as mask(s).
   /// [reverse] is a bool. When true it will mask on reverse mode, usually to be used on currency fields.
@@ -46,26 +42,28 @@ class TextInputMask extends TextInputFormatter {
   ///
   /// When passing an array of String as mask, the first mask applyed is the shortest going to longest.
   /// It will apply the next mask (bigger one, only when the typed text overflow the previous mask)
-  TextInputMask(
-      {this.mask,
-      this.reverse = false,
-      this.maxLength = -1,
-      this.placeholder = '',
-      this.maxPlaceHolders = -1}) {
-    magicMask = MagicMask.buildMask(mask);
-  }
+  TextInputMask({
+    required this.mask,
+    this.maxLength = -1,
+    bool reverse = false,
+    String placeholder = '',
+    int maxPlaceHolders = -1,
+  }) : magicMask = MagicMask(
+          mask,
+          reverse,
+          placeholder,
+          maxPlaceHolders,
+        );
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     try {
       return TextEditingValue.fromJSON(magicMask.executeMasking(
-          newValue.text,
-          newValue.selection.baseOffset,
-          reverse,
-          maxLength,
-          placeholder,
-          maxPlaceHolders));
+        newValue.text,
+        newValue.selection.baseOffset,
+        maxLength,
+      ));
     } catch (e) {
       print(e);
     }
