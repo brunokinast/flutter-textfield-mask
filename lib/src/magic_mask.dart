@@ -12,23 +12,23 @@ class MagicMask {
   static const String _token = 'token';
   static const String _tokenOpt = 'optionalToken';
   static const String _multiple = 'multiple';
-  static const String _multipleOpt = 'multiple';
+  static const String _multipleOpt = 'multipleOpt';
 
-  bool _reverse;
+  final bool _reverse;
+  final int _step;
+  final String _placeholder;
+  final int _maxPlaceHolderCharacters;
   bool _overflow;
   int _charIndex;
   int _tagIndex;
-  int _step;
   int _charDeslocation;
   int _cursorPosition;
-  String _placeholder;
-  int _maxPlaceHolderCharacters;
   String _maskedText;
   String _extraChar;
   int _typedCharacter;
 
+  final List<List<Map<String, String>>> _allTags = [];
   List<Map<String, String>> _tags = [];
-  List<List<Map<String, String>>> _allTags = [];
   int _curTag = 0;
 
   MagicMask(
@@ -158,8 +158,9 @@ class MagicMask {
     int cursorPosition,
     int maxLenght,
   ) {
-    if (text == null || text.isEmpty || _tags.length == 0)
+    if (text == null || text.isEmpty || _tags.isEmpty) {
       return _buildResultJson('', 0, maxLenght);
+    }
 
     List<Map<String, dynamic>> results = [];
     for (var i = 0; i < _allTags.length; i++) {
@@ -171,7 +172,9 @@ class MagicMask {
       _extraChar = '';
       _overflow = false;
       _tagIndex = _reverse ? _tags.length - 1 : 0;
-      for (Map<String, String> tag in _tags) tag['readed'] = '';
+      for (Map<String, String> tag in _tags) {
+        tag['readed'] = '';
+      }
 
       String cleared = clearMask(text);
       cleared = _clearPlaceHolder(cleared);

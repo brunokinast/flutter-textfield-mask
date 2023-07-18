@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/services.dart';
 
 import 'magic_mask.dart';
@@ -64,8 +66,8 @@ class TextInputMask extends TextInputFormatter {
         newValue.selection.baseOffset,
         maxLength,
       ));
-    } catch (e) {
-      print(e);
+    } catch (e, t) {
+      log('$e', name: 'EasyMask', error: e, stackTrace: t);
     }
     return newValue;
   }
